@@ -154,19 +154,29 @@ class Ui_Dialog(object):
 
                 cv2.imwrite('Imagen.jpg',frame)
                 image = cv2.imread('Imagen.jpg')
-                gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-                cv2.imwrite('imagenGris.jpg',gray_image)
+                self.NormalizarImagen()
 
+    #Metodo que muestra ya la imagen normalizada
     def MostrarImagen(self):
-        #Se crea la etiqueta para la foto
-        #img = cv2.imread('Imagen.jpg',0)
-        #cv2.imshow('Imagen',img)
-        filename = "Imagen.jpg"
-        oriimage = cv2.imread(filename,0)
-        newx,newy = oriimage.shape[1]/1,oriimage.shape[0]/1 #new size (w,h)
-        newimage = cv2.resize(oriimage,(newx,newy))
-        cv2.imshow("resize image",newimage)
-        cv2.waitKey(0)
+        imagen = cv2.imread("rostro.bmp")
+        cv2.imshow("rostro",imagen)
+
+    #Metodo para normalizar las imagenes
+    def NormalizarImagen(self):
+        face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
+        #se carga la imagen que fue tomada
+        img = cv2.imread("Imagen.jpg")
+        #se pasa a escala de grises
+        gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+        faces = face_cascade.detectMultiScale(gray, 1.3, 5)
+        for (x,y,w,h) in faces:
+            cv2.rectangle(img,(x,y),(x+w,y+h),(255,0,0),2)
+            roi_gray = gray[y:y+h, x:x+w]
+            roi_color = img[y:y+h, x:x+w]
+            #se redimensiona la imagen
+            tam = cv2.resize(roi_gray,(150,150))
+            #se guarda el rostro para pasarlo como entrada
+            cv2.imwrite('rostro.bmp',tam)
 
     def GuardarImagenes(self):
         namedWindow("webcam")
@@ -196,6 +206,7 @@ class Ui_Dialog(object):
                 cv2.imwrite('Img2.jpg',frame)
                 time.sleep(5)
                 cv2.imwrite('Img3.jpg',frame)
+                
 
 
 
