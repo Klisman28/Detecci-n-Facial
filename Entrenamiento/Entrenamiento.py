@@ -43,7 +43,7 @@ ds.addSample(x3,y)
 ds.addSample(x4,y)
 ds.addSample(x5,y)
 
-#El entranamiento es backprop
+#El entrenamiento es backprop
 entrenamiento = BackpropTrainer(neurona,ds)
 
 #Un error de 10 para comenzar
